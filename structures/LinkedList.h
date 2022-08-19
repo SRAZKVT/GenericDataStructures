@@ -16,12 +16,14 @@
 			struct NODE_TYPE *fst;
 		} LIST_TYPE;
 
+		// LinkedList_<type>_new
 		struct LIST_TYPE *CAT(LIST_TYPE, _new)() {
 			struct LIST_TYPE *ret = malloc(sizeof(LIST_TYPE));
 			ret->fst = NULL;
 			return ret;
 		}
 
+		// LinkedList_<type>_removeList
 		void CAT(LIST_TYPE, _removeList)(struct LIST_TYPE *list) {
 			struct NODE_TYPE *node = list->fst;
 			while (node) {
@@ -35,6 +37,7 @@
 			free(list);
 		}
 
+		// LinkedList_<type>_insert
 		void CAT(LIST_TYPE, _insert)(LIST_TYPE *list,
 		                             TYPE element) {
 			if (list->fst) {
@@ -52,6 +55,7 @@
 			}
 		}
 
+		// LinkedList_<type>_remove
 		int CAT(LIST_TYPE, _remove)(LIST_TYPE *list,
 		                            TYPE element) {
 			NODE_TYPE *node = list->fst;
@@ -68,6 +72,7 @@
 			return 0;
 		}
 
+		// LinkedList_<type>_removeAll
 		int CAT(LIST_TYPE, _removeAll)(LIST_TYPE *list,
 		                               TYPE element) {
 			int cnt = 0;
@@ -81,12 +86,12 @@
 					node = node->next;
 					free(toFree);
 					cnt += 1;
-				}
-				node = node->next;
+				} else node = node->next;
 			}
 			return cnt;
 		}
 
+		// LinkedList_<type>_size
 		int CAT(LIST_TYPE, _size)(LIST_TYPE *list) {
 			NODE_TYPE *node = list->fst;
 			int cnt = 0;
@@ -97,6 +102,7 @@
 			return cnt;
 		}
 
+		// LinkedList_<type>_print
 		void CAT(LIST_TYPE, _print)(LIST_TYPE *list,
 		                            void (*print_func)()) {
 			printf("[");
@@ -111,6 +117,5 @@
 
 		#undef NODE_TYPE
 		#undef LIST_TYPE
-		#undef TYPE
 	#endif
 #endif // LinkedList_h_INCLUDED

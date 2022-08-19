@@ -22,5 +22,6 @@ int main(void) {
 	LinkedList_int_print(list, print_int);
 	printf("%d\n", LinkedList_int_removeAll(list, 10));
 	printf("%d\n", LinkedList_int_removeAll(list, 11));
+	LinkedList_int_print(list, print_int);
 	LinkedList_int_removeList(list);
 }
