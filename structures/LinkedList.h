@@ -60,6 +60,7 @@
 					if (node->next) node->next->prev = node->prev;
 					if (node->prev) node->prev->next = node->next;
 					else list->fst = node->next;
+					free(node);
 					return 1;
 				}
 				node = node->next;
@@ -76,6 +77,9 @@
 					if (node->next) node->next->prev = node->prev;
 					if (node->prev) node->prev->next = node->next;
 					else list->fst = node->next;
+					NODE_TYPE *toFree = node;
+					node = node->next;
+					free(toFree);
 					cnt += 1;
 				}
 				node = node->next;
