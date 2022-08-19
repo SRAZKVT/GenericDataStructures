@@ -23,20 +23,6 @@
 			return ret;
 		}
 
-		// LinkedList_<type>_removeList
-		void CAT(LIST_TYPE, _removeList)(struct LIST_TYPE *list) {
-			struct NODE_TYPE *node = list->fst;
-			while (node) {
-				if (node->prev) free(node->prev);
-				if (!node->next) {
-					free(node);
-					break;
-				}
-				else node = node->next;
-			}
-			free(list);
-		}
-
 		// LinkedList_<type>_insert
 		void CAT(LIST_TYPE, _insert)(LIST_TYPE *list,
 		                             TYPE element) {
@@ -53,6 +39,31 @@
 				list->fst->next = NULL;
 				list->fst->prev = NULL;
 			}
+		}
+
+		// LinkedList<type>_copy
+		struct LIST_TYPE *CAT(LIST_TYPE, _copy)(struct LIST_TYPE *list) {
+			struct LIST_TYPE *cpy = CAT(LIST_TYPE, _new)();
+			NODE_TYPE *node = list->fst;
+			while (node) {
+				CAT(LIST_TYPE, _insert)(cpy, node->value);
+				node = node->next;
+			}
+			return cpy;
+		}
+
+		// LinkedList_<type>_removeList
+		void CAT(LIST_TYPE, _removeList)(struct LIST_TYPE *list) {
+			struct NODE_TYPE *node = list->fst;
+			while (node) {
+				if (node->prev) free(node->prev);
+				if (!node->next) {
+					free(node);
+					break;
+				}
+				else node = node->next;
+			}
+			free(list);
 		}
 
 		// LinkedList_<type>_remove
@@ -91,6 +102,44 @@
 			return cnt;
 		}
 
+		// LinkedList_<type>_removeIf
+		int CAT(LIST_TYPE, _removeIf)(LIST_TYPE *list,
+		                              int (*func)(TYPE)) {
+			int cnt = 0;
+			NODE_TYPE *node = list->fst;
+			while (node) {
+				if (func(node->value)) {
+					if (node->next) node->next->prev = node->prev;
+					if (node->prev) node->prev->next = node->next;
+					else list->fst = node->next;
+					NODE_TYPE *toFree = node;
+					node = node->next;
+					free(toFree);
+					cnt += 1;
+				} else node = node->next;
+			}
+			return cnt;
+		}
+
+		// LinkedList_<type>_removeIfNot
+		int CAT(LIST_TYPE, _removeIfNot)(LIST_TYPE *list,
+		                              int (*func)(TYPE)) {
+			int cnt = 0;
+			NODE_TYPE *node = list->fst;
+			while (node) {
+				if (!func(node->value)) {
+					if (node->next) node->next->prev = node->prev;
+					if (node->prev) node->prev->next = node->next;
+					else list->fst = node->next;
+					NODE_TYPE *toFree = node;
+					node = node->next;
+					free(toFree);
+					cnt += 1;
+				} else node = node->next;
+			}
+			return cnt;
+		}
+
 		// LinkedList_<type>_size
 		int CAT(LIST_TYPE, _size)(LIST_TYPE *list) {
 			NODE_TYPE *node = list->fst;
@@ -104,7 +153,7 @@
 
 		// LinkedList_<type>_print
 		void CAT(LIST_TYPE, _print)(LIST_TYPE *list,
-		                            void (*print_func)()) {
+		                            void (*print_func)(TYPE)) {
 			printf("[");
 			NODE_TYPE *node = list->fst;
 			while (node) {
