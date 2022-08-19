@@ -48,7 +48,39 @@
 				list->fst = malloc(sizeof(NODE_TYPE));
 				list->fst->value = element;
 				list->fst->next = NULL;
+				list->fst->prev = NULL;
 			}
+		}
+
+		int CAT(LIST_TYPE, _remove)(LIST_TYPE *list,
+		                            TYPE element) {
+			NODE_TYPE *node = list->fst;
+			while (node) {
+				if (node->value == element) {
+					if (node->next) node->next->prev = node->prev;
+					if (node->prev) node->prev->next = node->next;
+					else list->fst = node->next;
+					return 1;
+				}
+				node = node->next;
+			}
+			return 0;
+		}
+
+		int CAT(LIST_TYPE, _removeAll)(LIST_TYPE *list,
+		                               TYPE element) {
+			int cnt = 0;
+			NODE_TYPE *node = list->fst;
+			while (node) {
+				if (node->value == element) {
+					if (node->next) node->next->prev = node->prev;
+					if (node->prev) node->prev->next = node->next;
+					else list->fst = node->next;
+					cnt += 1;
+				}
+				node = node->next;
+			}
+			return cnt;
 		}
 
 		int CAT(LIST_TYPE, _size)(LIST_TYPE *list) {
