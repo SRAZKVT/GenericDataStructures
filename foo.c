@@ -36,4 +36,5 @@ int main(void) {
 	LinkedList_int_print(list2, print_int);
 	LinkedList_int_print(list, print_int);
 	LinkedList_int_removeList(list);
+	LinkedList_int_removeList(list2);
 }
