@@ -33,8 +33,12 @@ int main(void) {
 	LinkedList_int *list2 = LinkedList_int_copy(list);
 	LinkedList_int_removeIf(list2, even);
 	LinkedList_int_removeIfNot(list, even);
-	LinkedList_int_print(list2, print_int);
 	LinkedList_int_print(list, print_int);
+	LinkedList_int_print(list2, print_int);
 	LinkedList_int_removeList(list);
+	Maybe_int *m = LinkedList_int_get(list2, 3);
+	if (m->present) printf("3th element is: %d\n", m->value);
+	else printf("Out of bounds\n");
+	free(m);
 	LinkedList_int_removeList(list2);
 }

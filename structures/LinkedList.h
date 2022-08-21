@@ -3,6 +3,9 @@
 	#include "../macro.h"
 	#ifdef TYPE
 		#include <stdlib.h>
+		#include "../monads/Maybe.h"
+
+		#define MAYBE_TYPE CAT(Maybe_, TYPE)
 		#define LIST_TYPE CAT(LinkedList_, TYPE)
 		#define NODE_TYPE CAT(Node, LIST_TYPE)
 
@@ -140,6 +143,20 @@
 			return cnt;
 		}
 
+		// LinkedList_<type>_get
+		MAYBE_TYPE *CAT(LIST_TYPE, _get)(LIST_TYPE *list,
+		                                 int index) {
+			NODE_TYPE *node = list->fst;
+			while (node) {
+				index--;
+				if (index < 0)
+					return CAT(MAYBE_TYPE, _of)(node->value);
+				else node = node->next;
+			}
+			// If we end up here, index is out of bounds
+			return CAT(MAYBE_TYPE, _empty)();
+		}
+
 		// LinkedList_<type>_size
 		int CAT(LIST_TYPE, _size)(LIST_TYPE *list) {
 			NODE_TYPE *node = list->fst;
@@ -164,6 +181,7 @@
 			printf("]\n");
 		}
 
+		#undef MAYBE_TYPE
 		#undef NODE_TYPE
 		#undef LIST_TYPE
 	#endif
